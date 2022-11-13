@@ -6,7 +6,7 @@ all: main
 #tests.o: tests.cpp f_lab2_linkedlistsequence.h f_lab2_arraysequence.h
 #	$(CC) $(CFLAFS) -c tests.cpp
 
-main.o: main.cpp Sequence/f_lab2_sequence.h DA/f_lab2_arraysequence.h DA/f_lab2_dynamicarray.h LL/f_lab2_linkedlist.h LL/f_lab2_linkedlistsequence.h 
+main.o: main.cpp Sequence/f_lab2_sequence.h DA/f_lab2_arraysequence.h DA/f_lab2_dynamicarray.h LL/f_lab2_linkedlist.h LL/f_lab2_linkedlistsequence.h ftts.h
 	$(CC) $(CFLAGS) -c main.cpp
 
 main: main.o

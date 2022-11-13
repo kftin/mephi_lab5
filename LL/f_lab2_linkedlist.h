@@ -13,17 +13,11 @@ class LinkedList {
                 T data;
                 Element *next;
         };
-
-        //int length;
-        //int heigth;
-        //int width;
         Element *head;
         Element *tail;
 
     public:
         int length;
-        //int heigth;
-        //int width;
 
         LinkedList(T *items, int count);
         LinkedList();
@@ -91,15 +85,10 @@ LinkedList<T>::LinkedList() {
 template <typename T>
 LinkedList<T>::LinkedList(LinkedList<T> *list) {
    int size = list->length;
-   //heigth = list->heigth;
-   //width = list->width;
    head = NULL;
    tail = NULL;
    Element *ptr = list->head;
    for (int i = 0; i < size; i++) {
-       //if (i == size - 1) {
-       //     tail = ptr;
-       //}
         this->Append(ptr->data);
         ptr = ptr->next;
    }
@@ -120,17 +109,7 @@ template <typename T>
 int LinkedList<T>::GetLength() {
     return length;
 }
-/*
-template <typename T>
-int LinkedList<T>::GetWidth() {
-    return width;
-}
 
-template <typename T>
-int LinkedList<T>::GetHeigth() {
-    return heigth;
-}
-*/
 template <typename T>
 T LinkedList<T>::Get(int index) {
     if (index < 0 || index >= length) {
@@ -166,7 +145,7 @@ void LinkedList<T>::Append(T item) {
         length = 1;
     } else {
         Element *ptr = new Element;
-        ptr->data = item;
+        ptr->data = T(item);
         ptr->next = NULL;
         tail->next = ptr;
         tail = ptr;

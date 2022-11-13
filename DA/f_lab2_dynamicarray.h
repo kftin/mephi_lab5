@@ -32,6 +32,7 @@ class DynamicArray {
         DynamicArray *Copy();
 
         ~DynamicArray() {
+            //cout << "da free" << endl;
             delete[] pointer;
         }
 };
@@ -41,19 +42,17 @@ class DynamicArray {
 template <typename T>
 DynamicArray<T>::DynamicArray(T *items, int count) {
     pointer = new T[count];
-    //width = w;
-    //heigth = h;
     for (int i = 0; i < count; i++) {
         pointer[i] = items[i];
     }
     length = count;
+    //delete []items;
 }
 
 template <typename T>
 DynamicArray<T>::DynamicArray(int size) {
     pointer = new T[size];
     length = size;
-    ///cout << length << " length";
 }
 
 template <typename T>
@@ -65,8 +64,6 @@ template <typename T>
 DynamicArray<T>::DynamicArray(DynamicArray<T> *dynamicArray) {
     pointer = new T[dynamicArray->length];
     length = dynamicArray->length;
-    //heigth = dynamicArray->heigth;
-    //width = dynamicArray->width;
     for (int i = 0; i < length; i++) {
         pointer[i] = (dynamicArray->pointer)[i];
     }
@@ -85,6 +82,7 @@ T &DynamicArray<T>::GetRef(int index) {
     if (index > length || index < 0) {
         throw out_of_range("index out of range");
     }
+    //cout << "GetRef" << endl;
     return pointer[index];
 }
 
