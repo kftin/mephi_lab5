@@ -32,7 +32,7 @@ class LinkedList {
         LinkedList<T> *GetSubList(int startIndex, int endIndex);
         int GetLength();
 
-        void Append(T item); 
+        void Append(const T& item); 
         void Prepend(T item);
         void InsertAt(T item, int index);
         LinkedList<T> *Concat(LinkedList<T> *list);
@@ -135,7 +135,7 @@ T &LinkedList<T>::GetRef(int index) {
 }
 
 template <typename T>
-void LinkedList<T>::Append(T item) {
+void LinkedList<T>::Append(const T& item) {
     if (!head) {
         Element *ptr = new Element;
         ptr->data = item;
@@ -151,6 +151,7 @@ void LinkedList<T>::Append(T item) {
         tail = ptr;
         length++;
     }
+    cout << "suka" << endl;
 }
 
 template <typename T>

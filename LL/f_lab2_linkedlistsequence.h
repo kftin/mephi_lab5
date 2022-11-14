@@ -57,7 +57,7 @@ class LinkedListSequence : public Sequence<T> {
             delete list;
             return listSequence;
         }
-        void Append(T item) override {
+        void Append(const T& item) override {
             this->items->Append(item);
         }
         void Prepend(T item) override {

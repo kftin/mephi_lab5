@@ -34,10 +34,11 @@ class Word {
             this->occurrence = NULL;
         }
         Word(const Word &src) {
-            cout << "copy" << endl;
             this->occurrence = new ArraySequence<int>(src.occurrence);
+            cout << "copy " << this->occurrence << " vs " << src.occurrence << endl;
             this->word = new char[src.length];
-            memcpy(this->word, src.word, src.length);
+            copy(src.word, src.word + src.length, this->word);
+            cout << this->word[0] << this->word[1] << '\n';
             this->length = src.length;
             this->number = src.number;
         }
@@ -45,11 +46,9 @@ class Word {
             if (w) {
                 this->length = strlen(w);
                 this->word = new char[length];
-                memcpy(this->word, w, length);
-                int *items = new int[1];
-                items[0] = occurr;
-                this->occurrence = new ArraySequence<int>(items, 1);
-                delete []items;
+                copy(w, w + length, this->word);
+                this->occurrence = new ArraySequence<int>();
+                this->occurrence->Append(occurr);
                 number = 1;
             } else {
                 throw invalid_argument("there is no word");
@@ -78,10 +77,10 @@ class Word {
             }
             cout << endl;
             cout << "free word" << endl;*/
-            delete occurrence;
-            cout << "free occurrence" << endl;
+            //delete occurrence;
+            //cout << "free occurrence" << endl;
+            cout << "free char word " << (void*)word << endl;
             delete []word;
-            cout << "free char word" << endl;
        }
 };
 
@@ -132,12 +131,17 @@ class FTTS
                 i++;
             }
             if (!f) {
-                T *tmp = new T(str, number);
-                this->table->Get(h)->Append(*(tmp));
+                T tmp(str, number);
+                auto mylist = this->table->Get(h);
+                cout << "MARINAAAAAAAAAAAAAAAAAAAAA" << endl;
+                mylist->Append(tmp);
+                cout << "CHTOOOOOOOOO" << mylist << ' ' << endl;
                 this->amount++;
+                cout << "amount++ " << endl;
             } else {
                 this->table->Get(h)->GetRef(i-1).GetOccurrence()->Append(number);
             }
+            cout << "Why????\n";
         }
 
         ArraySequence<int> *Get(char *str) {
@@ -160,9 +164,11 @@ class FTTS
         }
 
         ~FTTS() {
-            for (int i = 0; i < size; i++) {
+            /*for (int i = 0; i < 1; i++) {
                 delete this->table->Get(i);
-            }
+            }*/
+            delete this->table->Get(1);
+            delete this->table->Get(0);
             delete this->table;
         }
 };

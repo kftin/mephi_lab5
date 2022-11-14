@@ -58,7 +58,7 @@ int main() {
         cin >> *(str + i);
     }
     str[2] = '\0';
-    FTTS<Word> *table = new FTTS<Word>(31);
+    FTTS<Word> *table = new FTTS<Word>(2);
     table->AddWord(str, 3);
     //table->AddWord(str, 4);
     //ArraySequence<int> *occurrence = table->Get(str);

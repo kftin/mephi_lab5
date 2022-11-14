@@ -16,7 +16,7 @@ class Sequence {
         //virtual int GetHeigth() const = 0;
         //virtual int GetWidth() const = 0;
 
-        virtual void Append(T item) = 0;
+        virtual void Append(const T& item) = 0;
         virtual void Prepend(T item) = 0;
         virtual void InsertAt(T item, int index) = 0;
 

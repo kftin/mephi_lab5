@@ -42,7 +42,7 @@ class ArraySequence: public Sequence<T> {
             return this->items->GetLength();
         }
 
-        void Append(T item) override {
+        void Append(const T& item) override {
             this->items->Resize(this->items->GetLength() + 1);
             this->items->Set(this->items->GetLength() - 1, item);
         }
