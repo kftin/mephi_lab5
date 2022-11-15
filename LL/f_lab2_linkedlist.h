@@ -151,7 +151,7 @@ void LinkedList<T>::Append(const T& item) {
         tail = ptr;
         length++;
     }
-    cout << "suka" << endl;
+    //cout << "suka" << endl;
 }
 
 template <typename T>

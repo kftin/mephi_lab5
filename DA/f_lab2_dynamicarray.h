@@ -58,6 +58,7 @@ DynamicArray<T>::DynamicArray(int size) {
 template <typename T>
 DynamicArray<T>::DynamicArray() {
     length = 0;
+    pointer = NULL;
 }
 
 template <typename T>
@@ -117,7 +118,9 @@ void DynamicArray<T>::Resize(int newSize) {
     for (int i = 0; i < copySize; i++) {
         ptr[i] = pointer[i];
     }
-    delete[] pointer;
+    if (pointer) {
+        delete[] pointer;
+    }
     pointer = ptr;
     length = newSize;
 }

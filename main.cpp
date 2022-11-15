@@ -58,14 +58,36 @@ int main() {
         cin >> *(str + i);
     }
     str[2] = '\0';
+    char *str1 = new char[3];
+    for (int i = 0; i < 2; i++) {
+        cin >> *(str1 + i);
+    }
+    str1[2] = '\0';
+
+
     FTTS<Word> *table = new FTTS<Word>(2);
-    table->AddWord(str, 3);
-    //table->AddWord(str, 4);
-    //ArraySequence<int> *occurrence = table->Get(str);
-    //for (int i = 0; i < occurrence->GetLength(); i++) {
-    //    cout << occurrence->Get(i) << endl;
-    //}
-    delete []str;
+    table->AddWord(str, 9);
+    table->AddWord(str, 4);
+    table->AddWord(str1, 5);
+
+    ArraySequence<int> *occurrence = table->Get(str);
+    cout << "length " << occurrence->GetLength() << endl;
+    for (int i = 0; i < occurrence->GetLength(); i++) {
+        cout << occurrence->Get(i) << ' ';
+    }
+    cout << endl;
+
+    ArraySequence<int> *occurrence1 = table->Get(str1);
+    cout << "length " << occurrence1->GetLength() << endl;
+    for (int i = 0; i < occurrence1->GetLength(); i++) {
+        cout << occurrence1->Get(i) << ' ';
+    }
+    cout << endl;
+
+    delete occurrence;
+    delete occurrence1;
+    delete[] str;
+    delete[] str1;
     delete table;
     return 0;
 }
