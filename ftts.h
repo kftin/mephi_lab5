@@ -43,10 +43,8 @@ class Word {
         }
         Word(const Word &src) {
             this->occurrence = new ArraySequence<int>(src.occurrence);
-            //cout << "copy " << this->occurrence << " vs " << src.occurrence << endl;
             this->word = new char[src.length];
             copy(src.word, src.word + src.length, this->word);
-            //cout << this->word[0] << this->word[1] << '\n';
             this->length = src.length;
             this->number = src.number;
         }
@@ -79,15 +77,7 @@ class Word {
         }
 
        ~Word() {
-            /*cout << this->GetLength() << endl;
-            for (int i = 0; i < this->GetLength(); i++) {
-                cout << *(this->GetWord() + i);
-            }
-            cout << endl;
-            cout << "free word" << endl;*/
             delete occurrence;
-            //cout << "free occurrence" << endl;
-            //cout << "free char word " << (void*)word << endl;
             delete []word;
        }
 };
@@ -99,6 +89,32 @@ class FTTS
         ArraySequence<LinkedListSequence<T> *> *table;
         int size;
         int amount;
+
+        void Restruct() {
+            ArraySequence<LinkedListSequence<T> *> *tmp = new ArraySequence<LinkedListSequence<T> *>(size * 2);
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < table->Get(i)->GetLength(); j++) {
+                    T w = this->table->Get(i)->GetRef(j);
+                    char *word = w.GetWord();
+                    
+                    cout << (int)strlen(word) << endl;
+                    cout << "table restuct, first word: " << endl;
+                    for (int p = 0; p < 3; p++) {
+                        cout << *(word + p);
+                    }
+                    cout << " ****" << endl << endl;
+
+                    //ArraySequence<int> *a = w.GetOccurrence();
+                    //for (int k = 0; k < a->GetLength(); k++) {
+                    //    this->AddWordInPointer(tmp, word, a->Get(k));
+                    //}
+                }   
+            }
+            this->size = this->size * 2;
+            delete this->table;
+            this->table = tmp;
+        }
+
     public:
         FTTS(int count) {
             this->table = new ArraySequence<LinkedListSequence<T> *>(count);
@@ -109,22 +125,45 @@ class FTTS
             amount = 0;
         }
 
-        int Hash(char *str, int size) {
-                int k = 199; //k > alph, some simle number
-                int mod = size;//size table, simple
-                long long h = 0, degree = 1;
-                int length = strlen(str);
-                for (int i = 0; i < length; i++) {
-                    int x = (int) (*(str + i) - 'a' + 1);
-                    h = (h + degree * x) % mod;
-                    degree = (degree * k) % mod;
-                }
-                if (h < 0) {
-                    h *= -1;
-                }
-                cout << "hash " << h << endl;
-                return h;
+        int Hash(char *str, int size_table) {
+            int k = 199; //k > alph, some simle number
+            int mod = size_table;//size table, simple
+            long long h = 0, degree = 1;
+            int length = strlen(str);
+            for (int i = 0; i < length; i++) {
+                int x = (int) (*(str + i) - 'a' + 1);
+                h = (h + degree * x) % mod;
+                degree = (degree * k) % mod;
+            }
+            if (h < 0) {
+                h *= -1;
+            }
+            cout << "hash " << h << endl;
+            return h;
         }
+
+        void AddWordInPointer(ArraySequence<LinkedListSequence<T> *> *tmp, char *str, int number) {
+            if (!str) {
+                throw invalid_argument("there is no str, we can't add word in table, stupid man");
+            }
+            int h = (int)(this->Hash(str, (this->size) * 2));
+            int f = 0, i = 0;
+            while (!f && i < tmp->Get(h)->GetLength()) {
+                T w = tmp->Get(h)->GetRef(i);
+                char *word = w.GetWord();
+                f = Equal(str, word);
+                i++;
+            }
+            if (!f) {
+                T tmp1(str, number);
+                auto mylist = tmp->Get(h);
+                mylist->Append(tmp1);
+                //this->amount++;
+            } else {
+                this->table->Get(h)->GetRef(i-1).GetOccurrence()->Append(number);
+            }
+        }
+
 
         void AddWord(char *str, int number) {
             if (!str) {
@@ -132,7 +171,6 @@ class FTTS
             }
             int h = (int)(this->Hash(str, this->size));
             int f = 0, i = 0;
-            //LinkedListSequence<T> list = this->table->GetRef(h);
             while (!f && i < this->table->Get(h)->GetLength()) {
                 T w = this->table->Get(h)->GetRef(i);
                 char *word = w.GetWord();
@@ -147,11 +185,15 @@ class FTTS
             } else {
                 this->table->Get(h)->GetRef(i-1).GetOccurrence()->Append(number);
             }
+            cout << endl << "amount/size " << (float)amount/(float)size << endl << endl;
+            if ((float)amount/(float)size > 0.75) {
+                cout << "restruct: " << endl << endl;
+                this->Restruct();
+            }
         }
 
         ArraySequence<int> *Get(char *str) {
             int h = (int)(this->Hash(str, this->size));
-            //cout << "hash " << h << endl;
             int f = 0, i = 0;
             while (!f && i < this->table->Get(h)->GetLength()) {
                     T w = this->table->Get(h)->GetRef(i);
@@ -159,18 +201,15 @@ class FTTS
                     f = Equal(str, word);
                     i++;
             }
-            //cout << "i " << i << endl;
             if (f) {
                 T w = this->table->Get(h)->GetRef(i-1);
                 ArraySequence<int> *res = new ArraySequence<int>(w.GetOccurrence());
-                //cout << "length " << res->GetLength() << endl;
-                //cout << res->Get(0) << endl;
                 return res;
             } else {
-                cout << "There is no word in table, stupid man" << endl;
-                return NULL;
+                throw invalid_argument("there is no such word in the text. stupid person");
             }
         }
+
 
         ~FTTS() {
             for (int i = 0; i < size; i++) {
