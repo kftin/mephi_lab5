@@ -1,0 +1,17 @@
+The shoe has asexual and sexual reproduction (sexual process).
+Asexual reproduction - transverse division in the active state. 
+It is accompanied by complex regeneration processes.
+For example, one of the individuals re-forms a cellular mouth with a perioral cilia,
+each completes the missing contractile vacuole, the basal bodies multiply and new cilia are formed, etc.
+The sexual process, like that of other ciliates, occurs in the form of conjugation.
+Shoes belonging to different clones are temporarily "glued" by their mouth sides,
+and a cytoplasmic bridge is formed between the cells.
+Then the macronuclei of the conjugating ciliates are destroyed, 
+and the micronuclei are divided by meiosis. Of the four haploid nuclei formed,
+three die, and the remaining one divides by mitosis.
+Each ciliate now has two haploid pronuclei - one is female (stationary) and the other is male (migratory).
+Ciliates exchange male pronuclei, while females remain in "their" cell. 
+Then, in each ciliate, "own" female and "alien" male pronuclei merge, forming a diploid nucleus - a synkaryon.
+When the synkaryon divides, two nuclei are formed.
+One of them becomes a diploid micronucleus, and the second turns into a polyploid macronucleus.
+In reality, this process is more complicated and is accompanied by special post-conjugation divisions.

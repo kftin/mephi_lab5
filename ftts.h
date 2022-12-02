@@ -1,8 +1,23 @@
 #include <cstring>
+#include <string>
 #include <iostream>
 #include "DA/f_lab2_arraysequence.h"
 #include "LL/f_lab2_linkedlistsequence.h"
 #include <stdexcept>
+
+#include "sort.h"
+
+template <typename T>
+int comp(T left, T right) {
+    //return left - right;
+    if (left.word > right.word) {
+        return 1;
+    } else if (left.word == right.word) {
+        return 0;
+    } else {
+        return -1;
+    }
+}
 
 int Equal(char *str1, char *str2) {
     int i = 0;
@@ -50,7 +65,7 @@ class Word {
         }
         Word(char *w, int occurr) {
             if (w) {
-                this->length = strlen(w);
+                this->length = strlen(w) + 1;
                 this->word = new char[length];
                 copy(w, w + length, this->word);
                 this->occurrence = new ArraySequence<int>();
@@ -90,24 +105,27 @@ class FTTS
         int size;
         int amount;
 
+        int GetSize() {
+            return size;
+        }
+
+        int GetAmount() {
+            return amount;
+        }
+
         void Restruct() {
             ArraySequence<LinkedListSequence<T> *> *tmp = new ArraySequence<LinkedListSequence<T> *>(size * 2);
+            for (int i = 0; i < size * 2; i++) {
+                tmp->Set(i, new LinkedListSequence<T>());
+            }
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < table->Get(i)->GetLength(); j++) {
                     T w = this->table->Get(i)->GetRef(j);
                     char *word = w.GetWord();
-                    
-                    cout << (int)strlen(word) << endl;
-                    cout << "table restuct, first word: " << endl;
-                    for (int p = 0; p < 3; p++) {
-                        cout << *(word + p);
+                    ArraySequence<int> *a = w.GetOccurrence();
+                    for (int k = 0; k < a->GetLength(); k++) {
+                        this->AddWordInPointer(tmp, word, a->Get(k));
                     }
-                    cout << " ****" << endl << endl;
-
-                    //ArraySequence<int> *a = w.GetOccurrence();
-                    //for (int k = 0; k < a->GetLength(); k++) {
-                    //    this->AddWordInPointer(tmp, word, a->Get(k));
-                    //}
                 }   
             }
             this->size = this->size * 2;
@@ -138,7 +156,6 @@ class FTTS
             if (h < 0) {
                 h *= -1;
             }
-            cout << "hash " << h << endl;
             return h;
         }
 
@@ -158,9 +175,9 @@ class FTTS
                 T tmp1(str, number);
                 auto mylist = tmp->Get(h);
                 mylist->Append(tmp1);
-                //this->amount++;
             } else {
                 this->table->Get(h)->GetRef(i-1).GetOccurrence()->Append(number);
+                this->table->Get(h)->GetRef(i-1).number++;
             }
         }
 
@@ -184,10 +201,10 @@ class FTTS
                 this->amount++;
             } else {
                 this->table->Get(h)->GetRef(i-1).GetOccurrence()->Append(number);
+                this->table->Get(h)->GetRef(i-1).number++;
+
             }
-            cout << endl << "amount/size " << (float)amount/(float)size << endl << endl;
             if ((float)amount/(float)size > 0.75) {
-                cout << "restruct: " << endl << endl;
                 this->Restruct();
             }
         }
@@ -208,6 +225,28 @@ class FTTS
             } else {
                 throw invalid_argument("there is no such word in the text. stupid person");
             }
+        }
+
+        Sequence<T> *GetDictionary() {
+            Word *a = new Word[this->GetAmount()];
+            int k = 0;
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < table->Get(i)->GetLength(); j++) {
+                    T w = this->table->Get(i)->GetRef(j);
+                    a[k] = T(w);
+                    k++;
+                }   
+            }
+            Sequence<T> *b = new ArraySequence<T>(a, this->GetAmount());
+            BubbleSort<T> *sort = new BubbleSort<T>;
+            Sequence<T> *res = sort->sort(b, comp);
+            delete sort;
+            /*for (int i = 0; i < amount; i++) {
+                delete (a + i * sizeof(Word));
+            }*/
+            delete b;
+            return res;
+
         }
 
 
